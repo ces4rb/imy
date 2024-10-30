@@ -4,33 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I Miss You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bona+Nova&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: black;
             color: white;
-            font-family: 'Bona Nova', serif;
+            font-family: 'Bona Nova SC', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            overflow: hidden;
             text-align: center;
-            animation: fadeIn 2s;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .typing {
+            border-right: 2px solid white;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 4s steps(30, end), blink-caret 0.75s step-end infinite;
         }
-
-        h1 {
-            font-size: 4em;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5);
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: white; }
         }
     </style>
 </head>
 <body>
-    <h1>i miss you</h1>
+    <div class="typing" id="text"></div>
+
+    <script>
+        const phrases = [
+            "I miss you",
+            "I miss you so much",
+            "I miss your love",
+            "I miss your touch",
+            "I miss what we had",
+            "I miss us",
+            "I miss our memories",
+            "I miss what we had",
+            "I'm sorry"
+        ];
+        let index = 0;
+        let charIndex = 0;
+        let currentPhrase = '';
+        let isDeleting = false;
+
+        function type() {
+            if (isDeleting) {
+                currentPhrase = phrases[index].substring(0, charIndex--);
+            } else {
+                currentPhrase = phrases[index].substring(0, charIndex++);
+            }
+            document.getElementById('text').textContent = currentPhrase;
+
+            if (charIndex === phrases[index].length + 1) {
+                isDeleting = true;
+                setTimeout(type, 2000);
+            } else if (charIndex === 0) {
+                isDeleting = false;
+                index = (index + 1) % phrases.length;
+            }
+            setTimeout(type, isDeleting ? 100 : 200);
+        }
+
+        type();
+    </script>
 </body>
 </html>
